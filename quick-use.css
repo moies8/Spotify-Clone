@@ -7,3 +7,6 @@
 .align-items{
     align-items: center;
 }
+.svginvert{
+    filter: invert(1);
+}
