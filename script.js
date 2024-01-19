@@ -1,6 +1,4 @@
 
-
-
 async function getsongs() {
     let songs = await fetch("http://127.0.0.1:3000/songs/")
     let response = await songs.text();
@@ -11,28 +9,90 @@ async function getsongs() {
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
         if (element.href.endsWith('.mp3')) {
-            mysongs.push(element.href.split("/songs/")[1])
+            let a = element.href.split("/songs/")[1]
+            mysongs.push(a)
         }
     }
     return mysongs
 }
+let curruntSong= new Audio();
+function playMp3(track, pause=true) {
+    curruntSong.src= "/songs/"+track
+    if(pause){
+        curruntSong.play();
+        play.src = "pause.svg"
+    }
+   
+    document.querySelector(".songName").innerHTML=`Playing- ${decodeURI(track)}`
+    document.querySelector(".playTime")
+}
+
+curruntSong.addEventListener("timeupdate", ()=>{
+    console.log(`${curruntSong.currentTime} or ${curruntSong.duration}`)
+    document.querySelector(".playTime").innerHTML=`${secondsToMmSs(curruntSong.currentTime)} / ${secondsToMmSs(curruntSong.duration)}`
+    document.querySelector(".circale").style.left=(curruntSong.currentTime/curruntSong.duration)*100+"%"
+})
 
 
 async function main() {
     let songs = await getsongs()
-    console.log(songs)
+
+    playMp3(songs[0],false)
     let songUl = document.querySelector('.songlist').getElementsByTagName('ul')[0]
-    // songUl.innerHTML= songUl.innerHTML + songs
     for (const song of songs) {
-        songUl.innerHTML = songUl.innerHTML + `<li>${song.replaceAll("%20", " ")}</li>`;
+        songUl.innerHTML = songUl.innerHTML + `
+        <li>
+        <div class="music_svg">
+            <img class="svginvert" src="music.svg" alt="" srcset="">
+        </div>
+        <div class="info flex">
+            <div class="song_name">
+            ${song.replaceAll("%20", " ")}  
+            </div>
+            <div class="singer_name">
+                Moies Malik
+            </div>
+        </div>
+        <div class="music_play">
+            <img class="svginvert" src="paly.svg" alt="" srcset="">
+        </div>
+    </li>`;
 
     }
-    let audio = new Audio(songs[0])
-    // audio.play();
-    audio.addEventListener('loadeddata', function () {
-        console.log(audio.duration)
+    
+    let picksong=document.querySelector(".songlist").getElementsByTagName("li")
+    Array.from(picksong).forEach(e=>{
+        e.addEventListener("click", element=>{
+            playMp3(e.querySelector(".info").getElementsByTagName("div")[0].innerHTML.trim())
+        })
+        console.log(e.querySelector(".info").getElementsByTagName("div")[0].innerHTML.trim())
+    })
+    // Array.from(document.querySelector(".songlist").getElementsByTagName("li")).forEach(e => {
+    //     console.log(e)
+    // })
+    
+    play.addEventListener("click", ()=>{
+        if(curruntSong.paused){
+            curruntSong.play();
+            play.src ="pause.svg"
+        }
+        else{
+            curruntSong.pause();
+            play.src = "paly.svg"
+        }
     })
 
+}
+
+function secondsToMmSs(seconds) {
+    let minutes = Math.floor(seconds / 60);
+    let remainingSeconds = Math.floor(seconds % 60);
+
+    // Add leading zero if needed
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    remainingSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
+
+    return `${minutes}:${remainingSeconds}`;
 }
 
 main()
