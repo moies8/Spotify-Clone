@@ -13,7 +13,11 @@
     <div class="container flex">
         <div class="left flex">
             <div class="home">
-                <img class="logo" src="logo.svg" alt="Logo">
+                <div class="logobar">
+                    <img class="logo" src="logo.svg" alt="Logo">
+                    <img src="cancel.svg" alt="" class="closeHamburger svginvert">
+                </div>
+                
                 <div class="homebar">
                     <img class="svginvert" src="home.svg" alt="">
                     <p>Home</p>
@@ -58,6 +62,7 @@
         <div class="right">
             <div class="navbar">
                 <div class="icons">
+                    <img class="hamburger svginvert" src="hamburger.svg" alt="" srcset="">
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 6L9 12L15 18" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="16" />
                     </svg>
@@ -98,12 +103,11 @@
         <div class="playbar">
             <div class="trackInfo">
                 <div class="controls">
-                    <img src="pre.svg" alt="" srcset="">
+                    <img id="pre" src="pre.svg" alt="" srcset="">
                     <img id="play" src="paly.svg" alt="" srcset="">
-                    <img src="next.svg" alt="" srcset="">
+                    <img id="next" src="next.svg" alt="" srcset="">
                 </div>
                 <div class="songName">
-                    Zalima-moies malik
                 </div>
                 <div class="playTime">
                     00:00

@@ -33,9 +33,10 @@ curruntSong.addEventListener("timeupdate", ()=>{
     document.querySelector(".circale").style.left=(curruntSong.currentTime/curruntSong.duration)*100+"%"
 })
 
+let songs;
 
 async function main() {
-    let songs = await getsongs()
+    songs = await getsongs()
 
     playMp3(songs[0],false)
     let songUl = document.querySelector('.songlist').getElementsByTagName('ul')[0]
@@ -79,6 +80,45 @@ async function main() {
         else{
             curruntSong.pause();
             play.src = "paly.svg"
+        }
+    })
+
+
+    document.querySelector(".seekbar").addEventListener("click",(e)=>{
+        let persent= (e.offsetX/e.target.getBoundingClientRect().width)*100
+        document.querySelector(".circale").style.left=persent + "%"
+        function updateSongTime(){
+            curruntSong.currentTime = ((curruntSong.duration)*persent)/100
+        }
+        updateSongTime()
+    })
+
+
+    //eventlistner on hamburger
+    document.querySelector(".hamburger").addEventListener("click",(e)=>{
+        document.querySelector(".left").style.left="0"
+
+    });
+
+    //close hamburger
+    document.querySelector(".closeHamburger").addEventListener("click",(e)=>{
+        document.querySelector(".left").style.left="-110%"
+    });
+
+    // for next song
+    next.addEventListener("click",(e)=>{
+        let index= songs.indexOf(curruntSong.src.split("/")[4])
+        if((index+1)>=0){
+            playMp3(songs[index+1])
+        }
+    })
+
+    //for previous song
+    pre.addEventListener("click",(e)=>{
+        curruntSong.pause()
+        let index= songs.indexOf(curruntSong.src.split("/")[4])
+        if(index-1>songs.length){
+            playMp3(songs[index-1])
         }
     })
 
